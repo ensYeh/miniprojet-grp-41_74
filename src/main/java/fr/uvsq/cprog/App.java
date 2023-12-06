@@ -29,9 +29,13 @@ public class App {
     }
 
     public static void main(String[] args) {
+        // chemin du dossier à explorer
         String cheminDossier = "c:/Users/kbyan/Documents/cours";
+
         App app = new App();
         app.setCurrentDirectory(cheminDossier);
+
+        // Appel de la fonction pour afficher l'interface du répertoire
         app.afficherInterfaceRepertoire();
     }
 
@@ -41,10 +45,12 @@ public class App {
         while (true) {
             String cheminDossier = getCurrentDirectory();
             File dossier = new File(cheminDossier);
-
+            
+            // Vérifie si le chemin spécifié est un dossier
             if (dossier.isDirectory()) {
                 File[] fichiers = dossier.listFiles();
 
+                // Visualisation du contenu du répertoire
                 System.out.println("Contenu du répertoire :");
 
                 if (fichiers != null && fichiers.length > 0) {
@@ -54,11 +60,13 @@ public class App {
 
                     int choixUtilisateur = 0;
 
+                    // Demande à l'utilisateur de choisir le fichier qu'il veut
                     try {
                         System.out.print("Saisissez le numéro de l'élément du répertoire (0 pour quitter) ou entrez une commande : ");
 
                         String input = scanner.nextLine();
 
+                        // Lire le fichier choisie
                         if (input.matches("\\d+")) {
                             choixUtilisateur = Integer.parseInt(input);
                         }
@@ -66,20 +74,18 @@ public class App {
                         e.printStackTrace();
                     }
 
+                    // Vérifie si l'utilisateur a saisi 0 pour quitter
                     if (choixUtilisateur == 0) {
                         System.out.println("Sortie de l'interface.");
                         break;
                     } else if (choixUtilisateur > 0 && choixUtilisateur <= fichiers.length) {
+                        // Affichez le nom de l'élément sélectionné
                         System.out.println("Vous avez sélectionné : " + fichiers[choixUtilisateur - 1].getName());
                         System.out.print("Que voulez-vous faire? (find pour rechercher, autre pour continuer) : ");
                         String action = scanner.next();
 
                         processUserAction(action, fichiers[choixUtilisateur - 1].getName());
 
-                        // Supprime cette partie qui affiche la liste du répertoire après avoir exécuté l'action
-                        // for (int i = 0; i < fichiers.length; i++) {
-                        //     System.out.println(i + 1 + ". " + fichiers[i].getName());
-                        // }
                     } else {
                         System.out.println("Numéro invalide. Veuillez réessayer.");
                     }
