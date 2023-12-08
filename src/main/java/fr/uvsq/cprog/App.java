@@ -45,11 +45,11 @@ public final class App {
         if (directory.isDirectory()) {
             this.currentDirectoryPath = directory.getAbsolutePath();
             System.out.println("Chemin du répertoire actuel : "
-    + this.currentDirectoryPath);
+                    + this.currentDirectoryPath);
 
         } else {
-            System.out.
-            println("Le chemin spécifié ne correspond pas à un dossier.");
+            System.out.println("Le chemin spécifié ne ");
+            System.out.println("correspond pas à un dossier.");
         }
     }
 
@@ -72,6 +72,10 @@ public final class App {
         App app = new App();
         app.setCurrentDirectory(cheminDossier);
 
+        // Affiche le contenu du répertoire avant de demander à
+        // l'utilisateur quelle commande exécuter
+        app.afficherContenuRepertoire();
+
         // Appel de la fonction pour afficher l'interface du répertoire
         app.afficherInterfaceRepertoire();
     }
@@ -83,86 +87,62 @@ public final class App {
         scanner = new Scanner(System.in);  // Initialisation du scanner
 
         while (true) {
-            String cheminDossier = getCurrentDirectory();
-            File dossier = new File(cheminDossier);
+            // Demande à l'utilisateur quelle action effectuer
+            System.out.print("Que voulez-vous faire? ");
+            System.out.print("(pour l'instant, seule la commande ");
+            System.out.print("'find' est supportée) : ");
+            String input = scanner.nextLine();
 
-            // Vérifie si le chemin spécifié est un dossier
-            if (dossier.isDirectory()) {
-                File[] fichiers = dossier.listFiles();
-
-                // Visualisation du contenu du répertoire
-                System.out.println("Contenu du répertoire :");
-
-                if (fichiers != null && fichiers.length > 0) {
-                    for (int i = 0; i < fichiers.length; i++) {
-                        System.out.
-                        println(i + 1 + ". " + fichiers[i].getName());
-                    }
-
-                    int choixUtilisateur = 0;
-
-                    // Demande à l'utilisateur de choisir le fichier qu'il veut
-                    try {
-                        System.out.print("Saisissez le numéro de l'élément du");
-                        System.out.print("répertoire, (0 pour quitter) ou ");
-                        System.out.print("entrez une commande : ");
-
-                        String input = scanner.nextLine();
-
-                        // Lire le fichier choisie
-                        if (input.matches("\\d+")) {
-                            choixUtilisateur = Integer.parseInt(input);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    // Vérifie si l'utilisateur a saisi 0 pour quitter
-                    if (choixUtilisateur == 0) {
-                        System.out.println("Sortie de l'interface.");
-                        break;
-                    } else if (choixUtilisateur > 0
-                    && choixUtilisateur <= fichiers.length) {
-                        // Affichez le nom de l'élément sélectionné
-                        System.out.println("Vous avez sélectionné : "
-                        + fichiers[choixUtilisateur - 1].getName());
-                        System.out.print("Que voulez-vous faire? (find pour r");
-                        System.out.print("echercher, autre pour continuer) : ");
-                        String action = scanner.next();
-
-                        processUserAction(action, fichiers[choixUtilisateur - 1]
-                        .getName());
-
-                    } else {
-                        System.out
-                        .println("Numéro invalide. Veuillez réessayer.");
-                    }
-                } else {
-                    System.out.println("Le dossier est vide.");
-                    break;
-                }
-            } else {
-                System.out.
-                println("Le chemin spécifié ne correspond pas à un dossier.");
-                break;
-            }
+            processUserAction(input);
         }
-
-        scanner.close();  // Fermeture du scanner à la fin de la méthode
     }
 
     /**
      * Traite l'action de l'utilisateur.
-     * @param action Action de l'utilisateur.
-     * @param fileName Nom du fichier.
+     * @param input Entrée de l'utilisateur.
      */
-    public void processUserAction(final String action, final String fileName) {
-        switch (action.toLowerCase()) {
+    public void processUserAction(final String input) {
+        String[] parts = input.split(" ", 2);
+
+        switch (parts[0].toLowerCase()) {
             case "find":
-                commande.findCommand(getCurrentDirectory(), fileName);
+                if (parts.length > 1) {
+                    String fileName = parts[1];
+                    commande.findCommand(getCurrentDirectory(), fileName);
+                } else {
+                    System.out.println("Veuillez spécifier le nom ");
+                    System.out.println("du fichier à rechercher.");
+                }
                 break;
             default:
-                System.out.println("Action non reconnue.");
+                System.out.println("Action non reconnue : " + input);
+        }
+    }
+
+    /**
+     * Affiche le contenu du répertoire.
+     */
+    public void afficherContenuRepertoire() {
+        String cheminDossier = getCurrentDirectory();
+        File dossier = new File(cheminDossier);
+
+        // Vérifie si le chemin spécifié est un dossier
+        if (dossier.isDirectory()) {
+            File[] fichiers = dossier.listFiles();
+
+            // Visualisation du contenu du répertoire
+            System.out.println("Contenu du répertoire :");
+
+            if (fichiers != null && fichiers.length > 0) {
+                for (int i = 0; i < fichiers.length; i++) {
+                    System.out.println(i + 1 + ". " + fichiers[i].getName());
+                }
+            } else {
+                System.out.println("Le dossier est vide.");
+            }
+        } else {
+            System.out.println("Le chemin spécifié ne ");
+            System.out.println("correspond pas à un dossier.");
         }
     }
 }
