@@ -84,17 +84,27 @@ public final class App {
      * Affiche l'interface du répertoire.
      */
     public void afficherInterfaceRepertoire() {
-        scanner = new Scanner(System.in);  // Initialisation du scanner
+        scanner = new Scanner(System.in);
 
         while (true) {
-            // Demande à l'utilisateur quelle action effectuer
             System.out.print("Que voulez-vous faire? ");
-            System.out.print("(pour l'instant, seule la commande ");
-            System.out.print("'find' est supportée) : ");
+            System.out.print("(pour l'instant, les commandes 'find', ");
+            System.out.print("'mkdir' et 'ls' sont supportées) : ");
             String input = scanner.nextLine();
 
-            processUserAction(input);
+            if (input.equals("0")) {
+                System.out.println("Sortie de l'interface.");
+                break;
+            }
+
+            if (input.equals("ls")) {
+                afficherContenuRepertoire();
+            } else {
+                processUserAction(input);
+            }
         }
+
+        scanner.close();
     }
 
     /**
@@ -110,8 +120,17 @@ public final class App {
                     String fileName = parts[1];
                     commande.findCommand(getCurrentDirectory(), fileName);
                 } else {
-                    System.out.println("Veuillez spécifier le nom ");
-                    System.out.println("du fichier à rechercher.");
+                    System.out.println("Veuillez spécifier le nom");
+                    System.out.println(" du fichier à rechercher.");
+                }
+                break;
+            case "mkdir":
+                if (parts.length > 1) {
+                    String dirName = parts[1];
+                    commande.mkdirCommand(getCurrentDirectory(), dirName);
+                } else {
+                    System.out.println("Veuillez spécifier le ");
+                    System.out.println("nom du répertoire à créer.");
                 }
                 break;
             default:
