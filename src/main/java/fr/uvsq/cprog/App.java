@@ -73,7 +73,7 @@ public final class App {
         app.setCurrentDirectory(cheminDossier);
 
         // Affiche le contenu du répertoire avant de demander à
-        // l'utilisateur quelle commande exécuter
+        // l'utilisateur quelle commande exécuter.
         app.afficherContenuRepertoire();
 
         // Appel de la fonction pour afficher l'interface du répertoire
