@@ -74,7 +74,7 @@ public final class App {
 
         // Affiche le contenu du répertoire avant de demander à
         // l'utilisateur quelle commande exécuter.
-        app.afficherContenuRepertoire();
+        app.afficherContenuRepertoireAvecNER();
 
         // Appel de la fonction pour afficher l'interface du répertoire
         app.afficherInterfaceRepertoire();
@@ -89,7 +89,7 @@ public final class App {
         while (true) {
             System.out.print("Que voulez-vous faire? ");
             System.out.print("(pour l'instant, les commandes 'find', ");
-            System.out.print("'mkdir' et 'ls' sont supportées) : ");
+            System.out.print("'mkdir', 'ls' et 'visu' sont supportées) : ");
             String input = scanner.nextLine();
 
             if (input.equals("0")) {
@@ -97,8 +97,14 @@ public final class App {
                 break;
             }
 
-            if (input.equals("ls")) {
-                afficherContenuRepertoire();
+            String[] parts = input.split(" ", 2);
+            if (parts.length == 2 && parts[0].matches("\\d+")) {
+                // Si la première partie est un numéro,
+                // on traite comme une commande "NER visu"
+                int ner = Integer.parseInt(parts[0]);
+                commande.visuCommand(getCurrentDirectory(), ner);
+            } else if (input.equals("ls")) {
+                afficherContenuRepertoireAvecNER();
             } else {
                 processUserAction(input);
             }
@@ -139,29 +145,26 @@ public final class App {
     }
 
     /**
-     * Affiche le contenu du répertoire.
+     * Affiche le contenu du répertoire avec les numéros associés.
      */
-    public void afficherContenuRepertoire() {
+    public void afficherContenuRepertoireAvecNER() {
         String cheminDossier = getCurrentDirectory();
         File dossier = new File(cheminDossier);
 
-        // Vérifie si le chemin spécifié est un dossier
         if (dossier.isDirectory()) {
             File[] fichiers = dossier.listFiles();
 
-            // Visualisation du contenu du répertoire
             System.out.println("Contenu du répertoire :");
-
             if (fichiers != null && fichiers.length > 0) {
                 for (int i = 0; i < fichiers.length; i++) {
-                    System.out.println(i + 1 + ". " + fichiers[i].getName());
+                   System.out.println(i + 1 + ". " + fichiers[i].getName());
                 }
             } else {
-                System.out.println("Le dossier est vide.");
+              System.out.println("Le dossier est vide.");
             }
         } else {
-            System.out.println("Le chemin spécifié ne ");
-            System.out.println("correspond pas à un dossier.");
+           System.out.println("Le chemin spécifié ne ");
+           System.out.println("correspond pas à un dossier.");
         }
     }
 }
