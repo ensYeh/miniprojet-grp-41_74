@@ -97,20 +97,53 @@ public final class App {
                 break;
             }
 
-            String[] parts = input.split(" ", 2);
-            if (parts.length == 2 && parts[0].matches("\\d+")) {
-                // Si la première partie est un numéro,
-                // on traite comme une commande "NER visu"
-                int ner = Integer.parseInt(parts[0]);
-                commande.visuCommand(getCurrentDirectory(), ner);
-            } else if (input.equals("ls")) {
-                afficherContenuRepertoireAvecNER();
+            if (input.matches("\\d+\\s.*")) {
+                // Si la commande commence par un NER,
+                //traite-la comme une commande avec NER
+                processUserActionWithNER(input);
             } else {
+                // Sinon, traite la commande normalement
                 processUserAction(input);
             }
         }
 
         scanner.close();
+    }
+
+    /**
+     * Traite l'action de l'utilisateur.
+     * @param input Entrée de l'utilisateur.
+     */
+    public void processUserActionWithNER(final String input) {
+        String[] parts = input.split(" ", 2);
+
+        try {
+            int ner = Integer.parseInt(parts[0].trim());
+
+            if (parts.length == 2) {
+                if (parts[1].equals(".")) {
+                    // Si la deuxième partie est ".",
+                    //considère cela comme une commande "cd"
+                    String newDirectory = commande
+                    .cdCommand(getCurrentDirectory(), ner);
+                    setCurrentDirectory(newDirectory);
+                } else if (parts[1].equalsIgnoreCase("visu")) {
+                    // Si la deuxième partie est "visu",
+                    //considère cela comme une commande "visu"
+                    commande.visuCommand(getCurrentDirectory(), ner);
+                } else {
+                    // Si ce n'est pas le cas, traite la commande normalement
+                    processUserAction(input);
+                }
+            } else {
+                // Si la deuxième partie est absente,
+                //considère cela comme une commande "visu"
+                commande.visuCommand(getCurrentDirectory(), ner);
+            }
+        } catch (NumberFormatException e) {
+            // Si la conversion en entier échoue, la commande n'est pas valide
+            System.out.println("Numéro NER invalide.");
+        }
     }
 
     /**
@@ -137,6 +170,16 @@ public final class App {
                 } else {
                     System.out.println("Veuillez spécifier le ");
                     System.out.println("nom du répertoire à créer.");
+                }
+                break;
+            case "ls":
+                afficherContenuRepertoireAvecNER();
+                break;
+            case "..":
+                String newDirectory = commande
+                .remonterDossier(getCurrentDirectory());
+                if (newDirectory != null) {
+                    setCurrentDirectory(newDirectory);
                 }
                 break;
             default:
