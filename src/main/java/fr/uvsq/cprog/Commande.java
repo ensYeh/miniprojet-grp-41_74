@@ -2,8 +2,10 @@ package fr.uvsq.cprog;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -219,6 +221,7 @@ public class Commande {
         } else {
             annotations.put(ner, new StringBuilder(texte));
         }
+        saveAnnotations();
     }
 
     /**
@@ -227,6 +230,7 @@ public class Commande {
      */
     public void retirerAnnotation(final int ner) {
         annotations.remove(ner);
+        saveAnnotations();
     }
 
     /**
@@ -237,5 +241,19 @@ public class Commande {
      */
     public String getAnnotationText(final int ner) {
         return annotations.getOrDefault(ner, new StringBuilder()).toString();
+    }
+
+    private void saveAnnotations() {
+        try (PrintWriter writer = new PrintWriter("notes.md")) {
+            writer.println("# Annotations\n");
+
+            for (Map.Entry<Integer, StringBuilder>
+            entry : annotations.entrySet()) {
+                writer.println("## NER " + entry.getKey()
+                + "\n" + entry.getValue().toString() + "\n");
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
