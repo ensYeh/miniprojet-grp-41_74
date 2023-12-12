@@ -4,11 +4,27 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * Classe représentant une commande de recherche.
  */
 public class Commande {
+
+    /**
+    * Map associant les numéros NER aux annotations associées.
+    */
+    private Map<Integer, StringBuilder> annotations;
+
+    /**
+     * Constructeur par défaut de la classe Commande.
+     * Initialise la structure de données pour stocker les annotations.
+     */
+    public Commande() {
+        this.annotations = new HashMap<>();
+    }
+
 
     /**
      * Exécute la commande de recherche.
@@ -190,5 +206,36 @@ public class Commande {
             System.out.println("Impossible de remonter d'un cran.");
             return null;
         }
+    }
+
+    /**
+     * Ajoute ou concatène un texte à l'annotation associée à un numéro NER.
+     * @param ner Le numéro associé à l'élément du répertoire.
+     * @param texte L'annotation à ajouter ou concaténer.
+     */
+    public void ajouterAnnotation(final int ner, final String texte) {
+        if (annotations.containsKey(ner)) {
+            annotations.get(ner).append(" ").append(texte);
+        } else {
+            annotations.put(ner, new StringBuilder(texte));
+        }
+    }
+
+    /**
+     * Retire tout le texte associé à l'annotation d'un numéro NER.
+     * @param ner Le numéro associé à l'élément du répertoire.
+     */
+    public void retirerAnnotation(final int ner) {
+        annotations.remove(ner);
+    }
+
+    /**
+     * Obtient le texte de l'annotation associée à un numéro NER.
+     * @param ner Le numéro associé à l'élément du répertoire.
+     * @return Le texte de l'annotation ou une
+     * chaîne vide si l'annotation n'existe pas.
+     */
+    public String getAnnotationText(final int ner) {
+        return annotations.getOrDefault(ner, new StringBuilder()).toString();
     }
 }

@@ -28,6 +28,11 @@ public final class App {
     private Commande commande;
 
     /**
+    * Nombre maximal de parties lors de la division d'une entrée utilisateur.
+    */
+    private static final int MAX_PARTS = 3;
+
+    /**
      * Constructeur de la classe App.
      */
     public App() {
@@ -115,7 +120,7 @@ public final class App {
      * @param input Entrée de l'utilisateur.
      */
     public void processUserActionWithNER(final String input) {
-        String[] parts = input.split(" ", 2);
+        String[] parts = input.split(" ", MAX_PARTS);
 
         try {
             int ner = Integer.parseInt(parts[0].trim());
@@ -131,19 +136,42 @@ public final class App {
                     // Si la deuxième partie est "visu",
                     //considère cela comme une commande "visu"
                     commande.visuCommand(getCurrentDirectory(), ner);
+                } else if (parts[1].equalsIgnoreCase("-")) {
+                    // Si la deuxième partie est "-",
+                    // considère cela comme une commande de retrait d'annotation
+                    commande.retirerAnnotation(ner);
+                    System.out.println("Annotation supprimé");
+                } else if (parts[1].equalsIgnoreCase("annotation")) {
+                    String annotationText = commande.getAnnotationText(ner);
+                    System.out.println("Annotation pour NER "
+                    + ner + ": " + annotationText);
                 } else {
                     // Si ce n'est pas le cas, traite la commande normalement
                     processUserAction(input);
                 }
+            } else if (parts.length == MAX_PARTS) {
+                if (parts[1].equals("+")) {
+                    if (parts[2].matches("\".*\"")) {
+                        String texteAnnotation = parts[2]
+                        .replaceAll("\"([^\"]*)\".*", "$1");
+                        commande.ajouterAnnotation(ner, texteAnnotation);
+                        System.out.println("Annotation ajouté");
+                    } else {
+                        // Gérer le cas où la syntaxe
+                        // des guillemets n'est pas correcte
+                        System.out.println("Syntaxe incorrecte ");
+                        System.out.println("pour les guillemets.");
+                    }
+                }
             } else {
-                // Si la deuxième partie est absente,
-                //considère cela comme une commande "visu"
-                commande.visuCommand(getCurrentDirectory(), ner);
-            }
-        } catch (NumberFormatException e) {
-            // Si la conversion en entier échoue, la commande n'est pas valide
-            System.out.println("Numéro NER invalide.");
+            // Si la deuxième partie est absente,
+            // considère cela comme une commande "visu"
+            commande.visuCommand(getCurrentDirectory(), ner);
         }
+    } catch (NumberFormatException e) {
+        // Si la conversion en entier échoue, la commande n'est pas valide
+        System.out.println("Numéro NER invalide.");
+    }
     }
 
     /**
