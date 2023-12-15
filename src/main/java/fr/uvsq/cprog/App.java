@@ -136,6 +136,10 @@ public final class App {
                     // Si la deuxième partie est "visu",
                     //considère cela comme une commande "visu"
                     commande.visuCommand(getCurrentDirectory(), ner);
+                } else if (parts[1].equalsIgnoreCase("copy")) {
+                    // Si la deuxième partie est "copy",
+                    //considère cela comme une commande "copy"
+                    commande.copyCommand(getCurrentDirectory(), ner);
                 } else if (parts[1].equalsIgnoreCase("-")) {
                     // Si la deuxième partie est "-",
                     // considère cela comme une commande de retrait d'annotation
@@ -209,6 +213,9 @@ public final class App {
                 if (newDirectory != null) {
                     setCurrentDirectory(newDirectory);
                 }
+                break;
+            case "past":
+                commande.pastCommand(getCurrentDirectory());
                 break;
             default:
                 System.out.println("Action non reconnue : " + input);
