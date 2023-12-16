@@ -155,10 +155,6 @@ public final class App {
                     // Si la deuxième partie est "cut",
                     // considère cela comme une commande "cut"
                     commande.cutCommand(getCurrentDirectory(), ner);
-                } else if (parts[1].equalsIgnoreCase("delete")) {
-                    // Si la deuxième partie est "cut",
-                    // considère cela comme une commande "cut"
-                    commande.deleteCommand(getCurrentDirectory(), ner);
                 } else {
                     // Si ce n'est pas le cas, traite la commande normalement
                     processUserAction(input);
