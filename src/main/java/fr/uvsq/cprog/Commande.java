@@ -8,11 +8,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.HashMap;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Classe représentant une commande de recherche.
  */
 public class Commande {
+
+    /**
+    * Indique si l'opération en cours est une opération de coupe (cut).
+    */
+    private boolean isCut = false;
 
     /**
     * Map associant les numéros NER aux annotations associées.
@@ -300,45 +309,124 @@ public class Commande {
     }
 
     /**
-     * Colle l'élément copié en mémoire dans le même
-     * répertoire en ajoutant "-copy" au nom.
-     * @param cheminDossier Le chemin du dossier à explorer.
-     */
+    * Colle l'élément copié à un nouvel
+    * emplacement et le supprime du répertoire d'origine.
+    * @param cheminDossier Le chemin du dossier à explorer.
+    */
     public void pastCommand(final String cheminDossier) {
         File dossier = new File(cheminDossier);
 
         if (dossier.isDirectory()) {
             if (elementCopie != null) {
                 String nomElementCopie = elementCopie.getName();
-                String nouveauNom = nomElementCopie + "-copy";
+                String nouveauNomCpi =
+                nouveauNom(cheminDossier, nomElementCopie);
+                File nouvelElementCpi = new File(cheminDossier, nouveauNomCpi);
 
-                File nouvelElement = new File(cheminDossier, nouveauNom);
-
-                // Vérifie si l'élément avec le nouveau nom existe déjà
-                int count = 1;
-                while (nouvelElement.exists()) {
-                    nouveauNom = nomElementCopie + "-copy(" + count + ")";
-                    nouvelElement = new File(cheminDossier, nouveauNom);
-                    count++;
-                }
-
+                // Copie l'élément copié vers le nouvel emplacement
                 if (elementCopie.isDirectory()) {
                     // Si l'élément copié est un dossier, copie récursive
-                    copyDirectory(elementCopie, nouvelElement);
+                    copyDirectory(elementCopie, nouvelElementCpi);
+
+                    if (isCut) {
+                        // Si c'était une copie-coupe,
+                        //supprime l'élément copié du répertoire d'origine
+                        deleteRecursive(elementCopie);
+                        isCut = false; // Réinitialise l'indicateur cut
+                    }
                 } else {
                     // Si l'élément copié est un fichier, copie simple
-                    copyFile(elementCopie, nouvelElement);
+                    copyFile(elementCopie, nouvelElementCpi);
+
+                    if (isCut) {
+                        // Si c'était une copie-coupe,
+                        //supprime l'élément copié du répertoire d'origine
+                        if (elementCopie.delete()) {
+                            System.out.println("Élément copié supprimé"
+                            + "avec succès.");
+                            isCut = false; // Réinitialise l'indicateur cut
+                        } else {
+                            System.out.println("Erreur lors de la "
+                            + "suppression de l'élément copié.");
+                        }
+                    }
                 }
 
                 System.out.println("Élément copié collé avec succès : "
-                 + nouvelElement.getName());
+                + nouvelElementCpi.getName());
             } else {
-                System.out.println("Aucun élément copié en mémoire.");
+                System.out.println("Aucun élément copié (cut) en mémoire.");
             }
         } else {
-            System.out.println("Le chemin spécifié ne ");
-            System.out.println("correspond pas à un dossier.");
+            System.out.println("Le chemin spécifié ne"
+            + "correspond pas à un dossier.");
         }
+    }
+
+    /**
+     * Supprime un dossier et son contenu de manière récursive.
+     * @param directory Le dossier à supprimer.
+     */
+    private void deleteRecursive(final File directory) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    // Si l'élément est un dossier, supprime récursivement
+                    deleteRecursive(file);
+                } else {
+                    // Si l'élément est un fichier, supprime simplement
+                    file.delete();
+                }
+            }
+        }
+
+        // Supprime le dossier une fois que son contenu est vidé
+        if (directory.delete()) {
+            System.out.println("Dossier supprimé avec succès : "
+            + directory.getName());
+        } else {
+            System.out.println("Erreur lors de la suppression du dossier.");
+        }
+    }
+
+    /**
+     * Obtient un nouveau nom pour l'élément en évitant les collisions.
+     * @param cheminDossier Le chemin du dossier actuel.
+     * @param nomOriginal Le nom original de l'élément.
+     * @return Le nouveau nom sans collision.
+     */
+    private String nouveauNom(final String cheminDossier,
+     final String nomOriginal) {
+        String nouveauNom = nomOriginal;
+        File dossier = new File(cheminDossier);
+        File[] fichiers = dossier.listFiles();
+
+        if (fichiers != null) {
+            // Vérifie si un élément du même nom existe déjà
+            boolean existeDeja = false;
+            for (File fichier : fichiers) {
+                if (fichier.getName().equals(nouveauNom)) {
+                    existeDeja = true;
+                    break;
+                }
+            }
+
+            // Si un élément du même nom existe déjà
+            if (existeDeja) {
+                // Ajoute le suffixe "-copy"
+                nouveauNom += "-copy";
+
+                // Ajoute un suffixe numérique si nécessaire
+                int index = 1;
+                while (new File(cheminDossier, nouveauNom).exists()) {
+                    nouveauNom = nomOriginal + "-copy(" + index + ")";
+                    index++;
+                }
+            }
+        }
+
+        return nouveauNom;
     }
 
     /**
@@ -382,6 +470,107 @@ public class Commande {
                     copyFile(file, newFile);
                 }
             }
+        }
+    }
+
+    /**
+     * Coupe l'élément associé au numéro NER.
+     * @param cheminDossier Le chemin du dossier à explorer.
+     * @param ner Le numéro associé à l'élément du répertoire.
+     */
+    public void cutCommand(final String cheminDossier, final int ner) {
+        File dossier = new File(cheminDossier);
+
+        if (dossier.isDirectory()) {
+            File[] fichiers = dossier.listFiles();
+
+            if (fichiers != null && ner > 0 && ner <= fichiers.length) {
+                File selectedFile = fichiers[ner - 1];
+
+                if (selectedFile.exists()) {
+                    // Si l'élément sélectionné est un fichier
+                    // ou un dossier, effectue la copie
+                    elementCopie = selectedFile;
+                    isCut = true; // Active l'indicateur cut
+                    System.out.println("Élément copié (cut) : "
+                    + elementCopie.getName());
+                } else {
+                    System.out.println("L'élément sélectionné n'existe pas.");
+                }
+            } else {
+                System.out.println("Numéro NER invalide.");
+            }
+        } else {
+            System.out.println("Le chemin spécifié ne ");
+            System.out.println("correspond pas à un dossier.");
+        }
+    }
+
+    /**
+     * Supprime l'élément associé au numéro NER.
+     * @param cheminDossier Le chemin du dossier à explorer.
+     * @param ner Le numéro associé à l'élément du répertoire.
+     */
+    public void deleteCommand(final String cheminDossier, final int ner) {
+        File dossier = new File(cheminDossier);
+
+        if (dossier.isDirectory()) {
+            File[] fichiers = dossier.listFiles();
+
+            if (fichiers != null && ner > 0 && ner <= fichiers.length) {
+                File selectedFile = fichiers[ner - 1];
+
+                if (selectedFile.exists()) {
+                    // Supprime l'élément du répertoire
+                    if (selectedFile.isDirectory()) {
+                        // Si l'élément est un dossier, supprime récursivement
+                        deleteDirectory(selectedFile);
+                    } else {
+                        // Si l'élément est un fichier, supprime simplement
+                        if (selectedFile.delete()) {
+                            System.out.println("Élément supprimé avec succès : "
+                            + selectedFile.getName());
+                        } else {
+                            System.out.println("Erreur lors de la ");
+                            System.out.println("suppression de l'élément.");
+                        }
+                    }
+                } else {
+                    System.out.println("L'élément sélectionné n'existe pas.");
+                }
+            } else {
+                System.out.println("Numéro NER invalide.");
+            }
+        } else {
+            System.out.println("Le chemin spécifié ne ");
+            System.out.println("correspond pas à un dossier.");
+        }
+    }
+
+    /**
+     * Supprime un dossier et son contenu de manière récursive.
+     * @param directory Le dossier à supprimer.
+     */
+    private void deleteDirectory(final File directory) {
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    // Si l'élément est un dossier, supprime récursivement
+                    deleteDirectory(file);
+                } else {
+                    // Si l'élément est un fichier, supprime simplement
+                    file.delete();
+                }
+            }
+        }
+
+        // Supprime le dossier une fois que son contenu est vidé
+        if (directory.delete()) {
+            System.out.println("Dossier supprimé avec succès : "
+            + directory.getName());
+        } else {
+            System.out.println("Erreur lors de la suppression du dossier.");
         }
     }
 }

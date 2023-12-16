@@ -21,8 +21,7 @@ public class CommandeTest {
 
         // Résultat attendu
         String expectedOutput = "Fichier trouvé : c:\\Users\\kbyan\\Documents\\cours\\abc.txt\r\n" + //
-                "Fichier trouvé : c:\\Users\\kbyan\\Documents\\cours\\s4\\abc.txt\r\n" + //
-                "Fichier trouvé : c:\\Users\\kbyan\\Documents\\cours\\s4-copy\\abc.txt";
+                "Fichier trouvé : c:\\Users\\kbyan\\Documents\\cours\\s4\\abc.txt\r\n";
 
         // Rediriger System.out pour capturer la sortie
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();

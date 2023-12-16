@@ -72,7 +72,7 @@ public final class App {
      */
     public static void main(final String[] args) {
         // chemin du dossier à explorer
-        String cheminDossier = "c:/Users/kbyan/Documents/cours";
+        String cheminDossier = System.getProperty("user.dir");
 
         App app = new App();
         app.setCurrentDirectory(cheminDossier);
@@ -146,9 +146,19 @@ public final class App {
                     commande.retirerAnnotation(ner);
                     System.out.println("Annotation supprimé");
                 } else if (parts[1].equalsIgnoreCase("annotation")) {
+                    // Si la deuxième partie est "annotation",
+                    // considère cela comme une commande "annotation"
                     String annotationText = commande.getAnnotationText(ner);
                     System.out.println("Annotation pour NER "
                     + ner + ": " + annotationText);
+                } else if (parts[1].equalsIgnoreCase("cut")) {
+                    // Si la deuxième partie est "cut",
+                    // considère cela comme une commande "cut"
+                    commande.cutCommand(getCurrentDirectory(), ner);
+                } else if (parts[1].equalsIgnoreCase("delete")) {
+                    // Si la deuxième partie est "cut",
+                    // considère cela comme une commande "cut"
+                    commande.deleteCommand(getCurrentDirectory(), ner);
                 } else {
                     // Si ce n'est pas le cas, traite la commande normalement
                     processUserAction(input);
