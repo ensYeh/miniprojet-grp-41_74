@@ -7,13 +7,13 @@ import java.io.PrintStream;
 
 import org.junit.jupiter.api.Test;
 
-public class CommandeTest {
+public class FindTest {
 
     @Test
     public void testFindCommand() {
         
         // Initialiser la commande
-        Commande commande = new Commande();
+        Find find = new Find();
 
         // Spécifier le chemin du dossier et le nom du fichier à rechercher
         String cheminDossier = "c:/Users/kbyan/Documents/cours";
@@ -28,7 +28,7 @@ public class CommandeTest {
         System.setOut(new PrintStream(outContent));
 
         // Exécuter la commande findCommand
-        commande.findCommand(cheminDossier, fileName);
+        find.findCommand(cheminDossier, fileName);
 
         // Vérifier si la sortie correspond à celle attendue
         assertEquals(expectedOutput.trim(), outContent.toString().trim());

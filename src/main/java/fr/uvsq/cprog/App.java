@@ -22,10 +22,40 @@ public final class App {
     private Scanner scanner;
 
     /**
-     * Instance de la classe Commande utilisée pour traiter
-     * les commandes de l'utilisateur.
+     * Instance de la classe Annotation utilisée pour traiter
+     * les annotations.
      */
-    private Commande commande;
+    private Annotation annotation;
+
+    /**
+     * Instance de la classe CopiePaste utilisée pour traiter
+     * les copier coller et cut.
+     */
+    private CopiePaste copiepaste;
+
+    /**
+     * Instance de la classe Visu utilisée pour traiter
+     * visu.
+     */
+    private Visu visu;
+
+    /**
+     * Instance de la classe Find utilisée pour traiter
+     * find.
+     */
+    private Find find;
+
+    /**
+     * Instance de la classe Mkdir utilisée pour traiter
+     * mkdir.
+     */
+    private Mkdir mkdir;
+
+    /**
+     * Instance de la classe NavigueDir utilisée pour traiter
+     * "." et ".." pour de déplacer dans les répertoires.
+     */
+    private NavigueDir navigueDir;
 
     /**
     * Nombre maximal de parties lors de la division d'une entrée utilisateur.
@@ -36,7 +66,12 @@ public final class App {
      * Constructeur de la classe App.
      */
     public App() {
-        this.commande = new Commande();
+        this.navigueDir = new NavigueDir();
+        this.annotation = new Annotation();
+        this.copiepaste = new CopiePaste();
+        this.find = new Find();
+        this.visu = new Visu();
+        this.mkdir = new Mkdir();
         this.currentDirectoryPath = System.getProperty("user.dir");
     }
 
@@ -129,32 +164,32 @@ public final class App {
                 if (parts[1].equals(".")) {
                     // Si la deuxième partie est ".",
                     //considère cela comme une commande "cd"
-                    String newDirectory = commande
+                    String newDirectory = navigueDir
                     .cdCommand(getCurrentDirectory(), ner);
                     setCurrentDirectory(newDirectory);
                 } else if (parts[1].equalsIgnoreCase("visu")) {
                     // Si la deuxième partie est "visu",
                     //considère cela comme une commande "visu"
-                    commande.visuCommand(getCurrentDirectory(), ner);
+                    visu.visuCommand(getCurrentDirectory(), ner);
                 } else if (parts[1].equalsIgnoreCase("copy")) {
                     // Si la deuxième partie est "copy",
                     //considère cela comme une commande "copy"
-                    commande.copyCommand(getCurrentDirectory(), ner);
+                    copiepaste.copyCommand(getCurrentDirectory(), ner);
                 } else if (parts[1].equalsIgnoreCase("-")) {
                     // Si la deuxième partie est "-",
                     // considère cela comme une commande de retrait d'annotation
-                    commande.retirerAnnotation(ner);
+                    annotation.retirerAnnotation(ner);
                     System.out.println("Annotation supprimé");
                 } else if (parts[1].equalsIgnoreCase("annotation")) {
                     // Si la deuxième partie est "annotation",
                     // considère cela comme une commande "annotation"
-                    String annotationText = commande.getAnnotationText(ner);
+                    String annotationText = annotation.getAnnotationText(ner);
                     System.out.println("Annotation pour NER "
                     + ner + ": " + annotationText);
                 } else if (parts[1].equalsIgnoreCase("cut")) {
                     // Si la deuxième partie est "cut",
                     // considère cela comme une commande "cut"
-                    commande.cutCommand(getCurrentDirectory(), ner);
+                    copiepaste.cutCommand(getCurrentDirectory(), ner);
                 } else {
                     // Si ce n'est pas le cas, traite la commande normalement
                     processUserAction(input);
@@ -164,7 +199,7 @@ public final class App {
                     if (parts[2].matches("\".*\"")) {
                         String texteAnnotation = parts[2]
                         .replaceAll("\"([^\"]*)\".*", "$1");
-                        commande.ajouterAnnotation(ner, texteAnnotation);
+                        annotation.ajouterAnnotation(ner, texteAnnotation);
                         System.out.println("Annotation ajouté");
                     } else {
                         // Gérer le cas où la syntaxe
@@ -176,7 +211,7 @@ public final class App {
             } else {
             // Si la deuxième partie est absente,
             // considère cela comme une commande "visu"
-            commande.visuCommand(getCurrentDirectory(), ner);
+            visu.visuCommand(getCurrentDirectory(), ner);
         }
     } catch (NumberFormatException e) {
         // Si la conversion en entier échoue, la commande n'est pas valide
@@ -195,7 +230,7 @@ public final class App {
             case "find":
                 if (parts.length > 1) {
                     String fileName = parts[1];
-                    commande.findCommand(getCurrentDirectory(), fileName);
+                    find.findCommand(getCurrentDirectory(), fileName);
                 } else {
                     System.out.println("Veuillez spécifier le nom");
                     System.out.println(" du fichier à rechercher.");
@@ -204,7 +239,7 @@ public final class App {
             case "mkdir":
                 if (parts.length > 1) {
                     String dirName = parts[1];
-                    commande.mkdirCommand(getCurrentDirectory(), dirName);
+                    mkdir.mkdirCommand(getCurrentDirectory(), dirName);
                 } else {
                     System.out.println("Veuillez spécifier le ");
                     System.out.println("nom du répertoire à créer.");
@@ -214,14 +249,14 @@ public final class App {
                 afficherContenuRepertoireAvecNER();
                 break;
             case "..":
-                String newDirectory = commande
+                String newDirectory = navigueDir
                 .remonterDossier(getCurrentDirectory());
                 if (newDirectory != null) {
                     setCurrentDirectory(newDirectory);
                 }
                 break;
             case "past":
-                commande.pastCommand(getCurrentDirectory());
+                copiepaste.pastCommand(getCurrentDirectory());
                 break;
             default:
                 System.out.println("Action non reconnue : " + input);
