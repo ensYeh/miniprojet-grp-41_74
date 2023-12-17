@@ -9,8 +9,8 @@ public class Visu {
 
     /**
      * Constructeur par défaut de la classe Visu.
-     * Initialise la structure de données pour visualiser
-     * les éléments.
+     * Permettant de visualiser les éléments
+     * fichiers.
      */
     public Visu() {
     }
@@ -38,15 +38,15 @@ public class Visu {
                         afficherTailleFichier(selectedFile);
                     }
                 } else {
-                    System.out.println("L'élément sélectionné n'est ");
-                    System.out.println("pas un fichier.");
+                    System.out.println("L'élément sélectionné n'est "
+                    + "pas un fichier.");
                 }
             } else {
                 System.out.println("Numéro NER invalide.");
             }
         } else {
-            System.out.println("Le chemin spécifié ne ");
-            System.out.println("correspond pas à un dossier.");
+            System.out.println("Le chemin spécifié ne "
+            + "correspond pas à un dossier.");
         }
     }
 
@@ -55,7 +55,7 @@ public class Visu {
      * @param file Le fichier à vérifier.
      * @return true si c'est un fichier texte, false sinon.
      */
-    private boolean isTextFile(final File file) {
+    public boolean isTextFile(final File file) {
         return file.getName().toLowerCase().endsWith(".txt");
     }
 
@@ -63,7 +63,7 @@ public class Visu {
      * Affiche le contenu du fichier texte.
      * @param file Le fichier texte à afficher.
      */
-    private void afficherContenuTexte(final File file) {
+    public void afficherContenuTexte(final File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             System.out.println("Contenu du fichier texte : "
             + file.getAbsolutePath());
@@ -80,7 +80,7 @@ public class Visu {
      * Affiche la taille du fichier.
      * @param file Le fichier dont la taille doit être affichée.
      */
-    private void afficherTailleFichier(final File file) {
+    public void afficherTailleFichier(final File file) {
         System.out.println("Taille du fichier : " + file.length() + " octets");
     }
 

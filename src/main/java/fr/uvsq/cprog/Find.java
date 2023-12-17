@@ -23,8 +23,8 @@ public class Find {
         if (dossier.isDirectory()) {
             findMatchingFiles(dossier, fileName);
         } else {
-            System.out.println("Le chemin spécifié ne correspond");
-            System.out.println(" pas à un dossier.");
+            System.out.println("Le chemin spécifié ne correspond"
+            + " pas à un dossier.");
         }
     }
 

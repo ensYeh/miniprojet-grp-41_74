@@ -63,6 +63,24 @@ public final class App {
     private static final int MAX_PARTS = 3;
 
     /**
+     * Récupère l'annotation associée à l'application.
+     *
+     * @return L'annotation associée à l'application.
+     */
+    public Annotation getAnnotation() {
+        return this.annotation;
+    }
+
+    /**
+     * Définit l'annotation pour l'application.
+     *
+     * @param newAnnotation L'annotation à définir.
+     */
+    public void setAnnotation(final Annotation newAnnotation) {
+        this.annotation = newAnnotation;
+    }
+
+    /**
      * Constructeur de la classe App.
      */
     public App() {
@@ -88,8 +106,8 @@ public final class App {
                     + this.currentDirectoryPath);
 
         } else {
-            System.out.println("Le chemin spécifié ne ");
-            System.out.println("correspond pas à un dossier.");
+            System.out.println("Le chemin spécifié ne "
+            + "correspond pas à un dossier.");
         }
     }
 
@@ -216,7 +234,7 @@ public final class App {
     } catch (NumberFormatException e) {
         // Si la conversion en entier échoue, la commande n'est pas valide
         System.out.println("Numéro NER invalide.");
-    }
+        }
     }
 
     /**
@@ -232,8 +250,8 @@ public final class App {
                     String fileName = parts[1];
                     find.findCommand(getCurrentDirectory(), fileName);
                 } else {
-                    System.out.println("Veuillez spécifier le nom");
-                    System.out.println(" du fichier à rechercher.");
+                    System.out.println("Veuillez spécifier le nom"
+                    + " du fichier à rechercher.");
                 }
                 break;
             case "mkdir":
@@ -241,8 +259,8 @@ public final class App {
                     String dirName = parts[1];
                     mkdir.mkdirCommand(getCurrentDirectory(), dirName);
                 } else {
-                    System.out.println("Veuillez spécifier le ");
-                    System.out.println("nom du répertoire à créer.");
+                    System.out.println("Veuillez spécifier le "
+                    + "nom du répertoire à créer.");
                 }
                 break;
             case "ls":
@@ -276,14 +294,14 @@ public final class App {
             System.out.println("Contenu du répertoire :");
             if (fichiers != null && fichiers.length > 0) {
                 for (int i = 0; i < fichiers.length; i++) {
-                   System.out.println(i + 1 + ". " + fichiers[i].getName());
+                    System.out.println(i + 1 + ". " + fichiers[i].getName());
                 }
             } else {
-              System.out.println("Le dossier est vide.");
+                System.out.println("Le dossier est vide.");
             }
         } else {
-           System.out.println("Le chemin spécifié ne ");
-           System.out.println("correspond pas à un dossier.");
+            System.out.println("Le chemin spécifié ne "
+            + "correspond pas à un dossier.");
         }
     }
 }

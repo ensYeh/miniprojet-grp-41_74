@@ -30,15 +30,15 @@ public class NavigueDir {
                 if (selectedFile.isDirectory()) {
                     return selectedFile.getAbsolutePath();
                 } else {
-                    System.out.println("L'élément sélectionné ");
-                    System.out.println("n'est pas un répertoire.");
+                    System.out.println("L'élément sélectionné "
+                    + "n'est pas un répertoire.");
                 }
             } else {
                 System.out.println("Numéro NER invalide.");
             }
         } else {
-            System.out.println("Le chemin spécifié ne ");
-            System.out.println("correspond pas à un dossier.");
+            System.out.println("Le chemin spécifié ne "
+            + "correspond pas à un dossier.");
         }
 
         // En cas d'échec, renvoie le chemin actuel

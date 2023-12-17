@@ -10,8 +10,8 @@ import java.io.OutputStream;
 public class CopiePaste {
 
     /**
-    * Indique si l'opération en cours est une opération de coupe (cut).
-    */
+     * Indique si l'opération en cours est une opération de coupe (cut).
+     */
     private boolean isCut = false;
 
     /**
@@ -30,6 +30,23 @@ public class CopiePaste {
      * les éléments.
      */
     public CopiePaste() {
+    }
+
+    /**
+     * Récupère l'élément copié.
+     *
+     * @return L'élément copié sous forme de fichier.
+     */
+    public File getElementCopie() {
+        return elementCopie;
+    }
+
+    /**
+     * Obtient la valeur de l'indicateur cut.
+     * @return true si c'est une opération de coupe, sinon false.
+     */
+    public boolean isCut() {
+        return isCut;
     }
 
     /**
@@ -123,7 +140,7 @@ public class CopiePaste {
      * Supprime un dossier et son contenu de manière récursive.
      * @param directory Le dossier à supprimer.
      */
-    private void deleteRecursive(final File directory) {
+    public void deleteRecursive(final File directory) {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
@@ -152,7 +169,7 @@ public class CopiePaste {
      * @param nomOriginal Le nom original de l'élément.
      * @return Le nouveau nom sans collision.
      */
-    private String nouveauNom(final String cheminDossier,
+    public String nouveauNom(final String cheminDossier,
      final String nomOriginal) {
         String nouveauNom = nomOriginal;
         File dossier = new File(cheminDossier);
@@ -210,7 +227,7 @@ public class CopiePaste {
     * @param sourceDirectory Le dossier source.
     * @param destinationDirectory Le dossier de destination.
     */
-    private void copyDirectory(final File sourceDirectory,
+    public void copyDirectory(final File sourceDirectory,
      final File destinationDirectory) {
         if (!destinationDirectory.exists()) {
             destinationDirectory.mkdir();

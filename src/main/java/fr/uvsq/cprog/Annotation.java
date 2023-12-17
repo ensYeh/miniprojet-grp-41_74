@@ -53,17 +53,21 @@ public class Annotation {
         return annotations.getOrDefault(ner, new StringBuilder()).toString();
     }
 
-    private void saveAnnotations() {
-        try (PrintWriter writer = new PrintWriter("notes.md")) {
-            writer.println("# Annotations\n");
+    /**
+ * Sauvegarde les annotations dans un fichier "notes.md".
+ * Les annotations sont écrites dans un format Markdown.
+ * Chaque annotation est associée à son numéro NER.
+ */
+public void saveAnnotations() {
+    try (PrintWriter writer = new PrintWriter("notes.md")) {
+        writer.println("# Annotations\n");
 
-            for (Map.Entry<Integer, StringBuilder>
-            entry : annotations.entrySet()) {
-                writer.println("## NER " + entry.getKey()
+        for (Map.Entry<Integer, StringBuilder> entry : annotations.entrySet()) {
+            writer.println("## NER " + entry.getKey()
                 + "\n" + entry.getValue().toString() + "\n");
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
     }
+}
 }
