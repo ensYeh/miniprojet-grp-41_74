@@ -79,8 +79,8 @@ public class AppTest {
         assertEquals(expectedCdOutput, outContent.toString());
 
         outContent.reset();
-        app.processUserActionWithNER("2 visu");
-        String expectedVisuOutput = "Taille du fichier : 289 octets\r\n";
+        app.processUserActionWithNER("7 visu");
+        String expectedVisuOutput = "Taille du fichier : 2996 octets\r\n";
         assertEquals(expectedVisuOutput, outContent.toString());
 
         outContent.reset();
