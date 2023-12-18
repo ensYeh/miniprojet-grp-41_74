@@ -24,6 +24,7 @@ L'application utilise des NER (Numéro d'Élément de Référence) pour manipule
 
 - `<NER> .` : Entrer dans le sous-répertoire correspondant.
 - `..` : Revenir dans le répertoire mère.
+- '0' : Pour quitter l'interface
 
 *Modifier les notes associées à un NER :*
 
