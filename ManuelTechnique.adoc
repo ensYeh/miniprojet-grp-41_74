@@ -1,0 +1,83 @@
+= Manuel technique
+
+== Compiler le projet
+----
+Pour préciser le chemin de java si il est demandé, $env:JAVA_HOME = "chemin_vers_java"
+----
+
+.Sous Linux
+----
+$ ./mvnw package
+----
+
+.Sous Windows
+----
+> ./mvnw.cmd package
+> ./mvnw test
+> ./mvnw checkstyle:check
+----
+
+=== Exécuter l'application
+----
+$  java -jar target/explorer-1.0-SNAPSHOT.jar
+----
+
+== Code Coverage
+
+*Visualisation Du Code Coverage*
+
+Comment consulter le rapport de couverture de code par les tests ?
+Lors de la phase test, Jacoco est appelé, il créera un repertoire 'reports' dans lequel
+se trouvera 'index.html', il faut ainsi l'ouvrir pour voir le rapport
+> ./mvnw test
+>  mvn jacoco:report
+
+== Bibliothèque
+
+*Quelle bibliothèque est utilisée?*
+
+-Junit : pour faire les tests.
+-Jacoco : Pour le code coverage.
+
+
+== Class
+
+*Quelle est le rôle des diffèrentes class?*
+
+=== App
+La classe principale de l'application qui gère le flux global du programme.
+
+=== Annotation
+Gère les annotations associées aux éléments du répertoire.
+
+=== CopiePaste
+Gère les opérations de copie, de coupe et de past d'éléments du répertoire.
+
+=== Find
+Recherche et affiche les fichiers dans les sous-répertoires du répertoire courant.
+
+=== Mkdir
+Gère la création de nouveaux répertoires.
+
+=== NavigueDir
+Gère la navigation dans les répertoires.
+
+=== Visu
+Gère l'affichage du contenu des fichiers texte ou de la taille des fichiers.
+
+== Traitements des Commandes Utilisateur
+
+Lorsqu'un utilisateur saisit une commande, la classe `App` analyse la commande et la dirige vers la classe appropriée pour le traitement. Par exemple, la commande "find" sera traitée par la classe `Find`.
+
+== Exemple de Commande Utilisateur
+
+Pour rechercher un fichier, l'utilisateur peut saisir la commande suivante :
+----
+find fichier.txt
+----
+
+== Améliorations Possibles
+
+- Ajout de fonctionnalités de tri pour afficher le contenu du répertoire de manière ordonnée.
+- Amélioration de la gestion des erreurs et des messages d'informations pour une meilleure expérience utilisateur.
+- Intégration de fonctionnalités de manipulation avancée des fichiers, telles que le renommage.

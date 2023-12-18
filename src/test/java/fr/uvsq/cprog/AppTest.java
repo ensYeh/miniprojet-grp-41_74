@@ -50,11 +50,11 @@ public class AppTest {
                     e.printStackTrace();
                 }
     
-                String expectedOutput = "Que voulez-vous faire? " +
-        "(pour l'instant, les commandes 'find', 'mkdir', 'ls' et 'visu' sont supportées) : " +
+                String expectedOutput = "Quelle commande voulait vous "
+                + "effectuer? help pour voir la liste de commande : " +
         "L'élément sélectionné n'est pas un fichier.\r\n" +
-        "Que voulez-vous faire? " +
-        "(pour l'instant, les commandes 'find', 'mkdir', 'ls' et 'visu' sont supportées) : ";
+        "Quelle commande voulait vous "
+                + "effectuer? help pour voir la liste de commande : ";;
                 assertEquals(expectedOutput.trim(), outContent.toString().trim());
             } finally {
                 System.setOut(System.out);
@@ -77,7 +77,7 @@ public class AppTest {
 
         outContent.reset();
         app.processUserActionWithNER("1 visu");
-        String expectedVisuOutput = "Taille du fichier : 73 octets\r\n";
+        String expectedVisuOutput = "Taille du fichier : 25 octets\r\n";
         assertEquals(expectedVisuOutput, outContent.toString());
 
         outContent.reset();
@@ -118,14 +118,16 @@ public class AppTest {
             + "4. .vscode\r\n"
             + "5. exemple\r\n"
             + "6. google_checks.xml\r\n"
-            + "7. mvnw\r\n"
-            + "8. mvnw.cmd\r\n"
-            + "9. notes.md\r\n"
-            + "10. pom.xml\r\n"
-            + "11. README.adoc\r\n"
-            + "12. src\r\n"
-            + "13. target\r\n"
-            + "14. testDir\r\n";
+            + "7. ManuelTechnique.adoc\r\n"
+            + "8. ManuelUtilisateur.adoc\r\n"
+            + "9. mvnw\r\n"
+            + "10. mvnw.cmd\r\n"
+            + "11. notes.md\r\n"
+            + "12. pom.xml\r\n"
+            + "13. README.adoc\r\n"
+            + "14. src\r\n"
+            + "15. target\r\n"
+            + "16. testDir\r\n";
         assertEquals(expectedLsOutput, outContent.toString());
 
         outContent.reset();
@@ -322,7 +324,7 @@ public class AppTest {
 
         app.processUserActionWithNER("1 + InvalidAnnotationSyntax");
 
-        String expectedOutput = "Syntaxe incorrecte \r\npour les guillemets.\r\n";
+        String expectedOutput = "Syntaxe incorrecte pour les guillemets.\r\n";
         assertEquals(expectedOutput, outContent.toString());
 
         System.setOut(System.out);

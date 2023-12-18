@@ -1,0 +1,122 @@
+== Manuel Utilisateur
+
+[quote]
+____
+Comment utiliser l'application ?
+____
+
+.Commandes pour les éléments du répertoire
+
+L'application utilise des NER (Numéro d'Élément de Référence) pour manipuler les éléments du répertoire. Voici comment utiliser les principales commandes :
+
+*Afficher le contenu du répertoire actuel :*
+
+- `ls` : Permet d'afficher le contenu actuel du répertoire.
+- `visu <NER>` : Visualiser le contenu d'un fichier texte ou afficher la taille en octets des autres types de fichiers.
+
+*Manipuler les fichiers et répertoires :*
+
+- `copy <NER>` : Copier un élément.
+- `cut <NER>` : Couper un élément.
+- `past` : Coller l'élément coupé ou copié.
+
+*Navigation dans le répertoire :*
+
+- `<NER> .` : Entrer dans le sous-répertoire correspondant.
+- `..` : Revenir dans le répertoire mère.
+
+*Modifier les notes associées à un NER :*
+
+- `<NER> + "texte"` : Ajouter du texte aux notes du NER.
+- `<NER> -` : Supprimer tout le texte associé à ce NER.
+
+*Afficher les notes associées à un NER :*
+
+- `<NER> annotation` : affiche l'annotation du NER
+
+*Création d'un répertoire :*
+
+- `mkdir "nom"` : Crée un répertoire avec le nom
+
+L'utilisateur peut trouver un guide en utilisant la commande `help`. Cette commande détaille la syntaxe et explique les différentes commandes disponibles.
+
+[quote]
+____
+Mises à jour des annotations
+____
+
+Les annotations sont mises à jour en fonction du type de commande. Les commandes `+` et `-` permettent d'ajouter ou de supprimer du texte dans les notes associées à un NER.
+
+== Amélioration
+
+[quote]
+____
+Prise en charge d'images PNG
+____
+
+Pour afficher une image PNG, utilisez une bibliothèque Java comme javax.imageio ou Apache PDFBox.
+
+[quote]
+____
+Commandes à rajouter
+____
+
+*Suppression d'éléments :*
+
+Ajoutez une commande pour supprimer des fichiers ou répertoires.
+- `supp [NER]` : Permet de supprimer un fichier ou un dossier.
+
+*Renommer des éléments :*
+
+Introduisez une commande pour renommer des fichiers ou des répertoires.
+- `rename [NER] [nouveau_nom]` : Permet de renommer un fichier ou un dossier.
+
+[quote]
+____
+Améliorations de l'interface clavier
+____
+
+*Ajout d'une meilleure console :*
+
+Rendre la console plus esthetique avec des couleurs, des polices, ou des tailles différentes. 
+
+*Historique des commandes :*
+
+Implémenter une fonctionnalité d'historique pour faciliter la navigation et la réutilisation des commandes.
+
+*Auto-complétion :*
+
+Intégrer une fonction d'auto-complétion pour accélérer la saisie des commandes.
+
+[quote]
+____
+Évolutions possibles
+____
+
+*Interface graphique (GUI) :*
+
+Envisager le développement d'une interface graphique pour une utilisation plus conviviale.
+
+*Prise en charge de nouveaux types de fichiers :*
+
+Étendre la prise en charge à d'autres types de fichiers tels que les images, les vidéos, les documents, etc.
+
+*Système de permissions :*
+
+Implémenter un système de permissions pour restreindre l'accès à certaines commandes en fonction de l'utilisateur.
+
+*Rajout d'options pour les différentes commandes :*
+
+Il est possible d'ajouter des options pour chacune des commandes afin d'avoir une meilleure modularité.
+
+*Optimisation des performances :*
+
+Optimiser les performances pour gérer efficacement de grands ensembles de fichiers et répertoires.
+
+*Gestion avancée :*
+
+Intégration de fonctionnalités de gestion avancée des fichiers, telles que la compression et la décompression.
+
+*Recherche avancée :*
+
+Ajout de fonctionnalités de recherche avancée avec des filtres.

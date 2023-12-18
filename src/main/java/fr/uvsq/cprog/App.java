@@ -145,9 +145,8 @@ public final class App {
         scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.print("Que voulez-vous faire? ");
-            System.out.print("(pour l'instant, les commandes 'find', ");
-            System.out.print("'mkdir', 'ls' et 'visu' sont supportées) : ");
+            System.out.print("Quelle commande voulait vous "
+                + "effectuer? help pour voir la liste de commande : ");
             String input = scanner.nextLine();
 
             if (input.equals("0")) {
@@ -222,8 +221,8 @@ public final class App {
                     } else {
                         // Gérer le cas où la syntaxe
                         // des guillemets n'est pas correcte
-                        System.out.println("Syntaxe incorrecte ");
-                        System.out.println("pour les guillemets.");
+                        System.out.println("Syntaxe incorrecte "
+                        + "pour les guillemets.");
                     }
                 }
             } else {
@@ -276,9 +275,36 @@ public final class App {
             case "past":
                 copiepaste.pastCommand(getCurrentDirectory());
                 break;
+            case "help":
+                help();
+                break;
             default:
                 System.out.println("Action non reconnue : " + input);
         }
+    }
+
+    public void help() {
+        System.out.println("Les commandes du gestionnaire de fichiers sont :");
+        System.out.println("[<NER>] copy: Copie l'élément "
+        + "correspondant au NER.");
+        System.out.println("[<NER>] cut : Coupe l'élément correspondant au NER.");
+        System.out.println("past : Colle l'élement copié/coupé à "
+        + "l'emplacement actuel.");
+        System.out.println(".. : Remonte d'un cran dans le système de fichiers.");
+        System.out.println("[<NER>] . : Entre dans un répertoire si le NER "
+        + "désigne un répertoire.");
+        System.out.println("mkdir <nom> : Crée un répertoire avec le nom spécifié.");
+        System.out.println("[<NER>] visu : Affiche le contenu d'un fichier texte."
+        + "Si le fichier n'est pas de type texte, affiche sa taille.");
+        System.out.println("find <nom fichier> : Recherche et affiche le(s) fichier(s)"
+        + "dans tout les sous-répertoires du répertoire courant.");
+        System.out.println("[<NER>] + \"ceci est un texte\" : Ajoute ou concatène le "
+        + "texte spécifié à l'annotation de l'ER.");
+        System.out.println("[<NER>] - : Retire tout le texte associé à l'annotation "
+        + "de l'ER.");
+        System.out.println("ls : Affiche le contenu du répertoire.");
+        System.out.println("NER annotation : Affiche l'annotation associée à "
+        + "l'ER spécifié.");
     }
 
     /**
