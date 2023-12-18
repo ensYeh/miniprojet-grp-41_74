@@ -276,4 +276,14 @@ public class CopiePasteTest {
         result = copiePaste.nouveauNom(testDir.getAbsolutePath(), "testFile.txt");
         assertTrue(result.startsWith("testFile.txt-copy(2)"));
     }
+
+    @Test
+    public void testCopyFile_SourceNotExists() {
+        File sourceFile = new File("nonexistentfile.txt");
+        File destinationFile = new File("destination.txt");
+
+        copiePaste.copyFile(sourceFile, destinationFile);
+
+        assertTrue(outContent.toString().contains("Erreur lors de la copie du fichier"));
+    }
 }

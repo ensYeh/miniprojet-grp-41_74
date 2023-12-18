@@ -207,7 +207,7 @@ public class CopiePaste {
      * @param sourceFile Le fichier source.
      * @param destinationFile Le fichier de destination.
      */
-    private void copyFile(final File sourceFile, final File destinationFile) {
+    public void copyFile(final File sourceFile, final File destinationFile) {
         try (InputStream in = new FileInputStream(sourceFile);
             OutputStream out = new FileOutputStream(destinationFile)) {
             byte[] buffer = new byte[BUFFER_SIZE];

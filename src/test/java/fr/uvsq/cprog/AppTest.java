@@ -17,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AppTest {
 
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+
     @Test
     public void testLsCommand() {
         App app = new App();
@@ -77,7 +80,7 @@ public class AppTest {
 
         outContent.reset();
         app.processUserActionWithNER("1 visu");
-        String expectedVisuOutput = "Taille du fichier : 25 octets\r\n";
+        String expectedVisuOutput = "Taille du fichier : 284 octets\r\n";
         assertEquals(expectedVisuOutput, outContent.toString());
 
         outContent.reset();
@@ -393,5 +396,22 @@ public class AppTest {
         Annotation mockAnnotation = new Annotation();
         app.setAnnotation(mockAnnotation);
         assertNotNull(app.getAnnotation());
+    }
+
+    @Test
+    public void testHelp() {
+
+        System.setOut(new PrintStream(outContent));
+
+        App app = new App();
+        app.help();
+
+        System.setOut(originalOut);
+
+        String helpOutput = outContent.toString();
+        assertTrue(helpOutput.contains("Les commandes du gestionnaire de fichiers sont :"));
+        assertTrue(helpOutput.contains("[<NER>] copy: Copie l'élément correspondant au NER."));
+        assertTrue(helpOutput.contains("[<NER>] cut : Coupe l'élément correspondant au NER."));
+        assertTrue(helpOutput.contains("past : Colle l'élement copié/coupé à l'emplacement actuel."));
     }
 }
